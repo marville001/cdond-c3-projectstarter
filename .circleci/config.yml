@@ -448,7 +448,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - install_awscli
       - run:
           name: Install dep / Save Old Workflow ID to kvdb.io
           command: |
