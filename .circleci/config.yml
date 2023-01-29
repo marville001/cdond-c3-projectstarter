@@ -457,6 +457,7 @@ jobs:
             echo "Old Wokflow ID: $OLD_WORKFLOW_ID"
             curl https://kvdb.io/MU1LxWLbS3TdLumBrcmzMB/old_workflow_id -d "${OLD_WORKFLOW_ID}"
 
+
       - run:
           name: Update cloudfront distribution
           command: |
@@ -488,7 +489,7 @@ jobs:
             echo Stack names: "${STACKS[@]}"
             export OldWorkflowID=$(curl --insecure https://kvdb.io/MU1LxWLbS3TdLumBrcmzMB/old_workflow_id)
             echo Old Workflow ID: $OldWorkflowID
-            
+
       - run:
           name: Remove old stacks and files
           command: |
