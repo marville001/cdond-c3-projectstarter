@@ -487,7 +487,6 @@ jobs:
             --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
 
             echo Old Workflow ID: $OldWorkflowID
-            echo <<pipeline.parameters>>
             echo stack names: "${STACKS[@]}"
 
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
