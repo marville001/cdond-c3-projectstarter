@@ -425,6 +425,7 @@ jobs:
             else
               exit 1
             fi
+
       - run:
           name: Frontend smoke test.
           command: |
@@ -476,6 +477,7 @@ jobs:
       - checkout
       
       - install_awscli
+      
       - run:
           name: Get old stack workflow id
           command: |
@@ -486,6 +488,7 @@ jobs:
             echo Stack names: "${STACKS[@]}"
             export OldWorkflowID=$(curl --insecure https://kvdb.io/MU1LxWLbS3TdLumBrcmzMB/old_workflow_id)
             echo Old Workflow ID: $OldWorkflowID
+            
       - run:
           name: Remove old stacks and files
           command: |
