@@ -448,6 +448,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - install_awscli
       - run:
           name: Install dep / Save Old Workflow ID to kvdb.io
           command: |
@@ -456,7 +457,6 @@ jobs:
             --no-paginate --output text)
             echo "Old Wokflow ID: $OLD_WORKFLOW_ID"
             curl https://kvdb.io/MU1LxWLbS3TdLumBrcmzMB/old_workflow_id -d "${OLD_WORKFLOW_ID}"
-
 
       - run:
           name: Update cloudfront distribution
