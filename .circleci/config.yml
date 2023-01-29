@@ -476,7 +476,6 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      
       - install_awscli
       
       - run:
