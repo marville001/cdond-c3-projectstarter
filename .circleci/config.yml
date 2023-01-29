@@ -479,22 +479,17 @@ jobs:
       - install_awscli
       
       - run:
-          name: Get old stack workflow id
+          name: Get old stack workflow id and Remove stacks and files
           command: |
-            # your code here
-            export STACKS=($(aws cloudformation list-stacks \
-                --query "StackSummaries[*].StackName" \
-                --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
-            echo Stack names: "${STACKS[@]}"
             export OldWorkflowID=$(curl --insecure https://kvdb.io/MU1LxWLbS3TdLumBrcmzMB/old_workflow_id)
-            echo Old Workflow ID: $OldWorkflowID
+            export STACKS=$(aws cloudformation list-stacks \
+            --query "StackSummaries[*].StackName" \
+            --stack-status-filter CREATE_COMPLETE --no-paginate --output text)
 
-      - run:
-          name: Remove old stacks and files
-          command: |
-            export OldWorkflowID=$(curl --insecure https://kvdb.io/MU1LxWLbS3TdLumBrcmzMB/old_workflow_id)
             echo Old Workflow ID: $OldWorkflowID
+            echo <<pipeline.parameters.workflow_id>>
             echo stack names: "${STACKS[@]}"
+
             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
             then
               echo "----------cleaning up stacks------------"
