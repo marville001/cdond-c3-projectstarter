@@ -244,11 +244,13 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --output text --filter Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} >> inventory.txt
             cat inventory.txt
-            #  export BACKEND_IP=$(aws ec2 describe-instances \
-            # --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            # --filter Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} \
-            # --output text 
-            # )
+            export BACKEND_IP=$(aws ec2 describe-instances \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --filter Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} \
+            --output text 
+            )
+
+            curl --insecure https://kvdb.io/MU1LxWLbS3TdLumBrcmzMB/public_dns  -d '${BACKEND_IP}'
             # echo ${BACKEND_IP}
       - persist_to_workspace:
           root: ~/
@@ -343,6 +345,9 @@ jobs:
             --filter Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} \
             --output text 
             )
+            export PUBLIC_DNS=$(curl --insecure https://kvdb.io/MU1LxWLbS3TdLumBrcmzMB/public_dns)
+            echo "PUBLIC_DNS = ${PUBLIC_DNS}" 
+
             export API_URL="http://${BACKEND_IP}:3030"
             echo "API_URL = ${API_URL}"
             echo "API_URL=http://${BACKEND_IP}:3030" >> frontend/.env
@@ -470,7 +475,7 @@ jobs:
             aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
             --stack-name InitialStack \
-            --parameter-overrides WorkflowID=udapeople-"${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople
 
       - destroy-environment
